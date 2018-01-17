@@ -1,80 +1,81 @@
 
+$("body").on("click", ".car", function(event) {
+    event.preventDefault();
+    $("#cars").empty();
+    var currentCar = $(this).data("name");
+    var apiURL = "http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=10&q=" + currentCar;
 
-/*$("#car-button").on("click", function() {
+    $.ajax({
+        url: apiURL,
+        method: 'GET'
+    }).done(function(message) {
+        var results = message.data;
+        for (var i = 0; i < results.length; i++) {
+            var carDiv = $("<div class='car-item'>");
 
-      // Storing our giphy API URL for a random cat image
-      var corvetteURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=corvette";
+            var rating = results[i].rating;
 
-      //var mustangURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=mustang";
+            var p = $("<p>").text("Rating: " + rating);
 
-      //var carURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=cars";
+            var animated = results[i].images.fixed_height.url;
+            var still = results[i].images.fixed_height_still.url;
 
-      // Perfoming an AJAX GET request to our queryURL
-      $.ajax({
-        url: corvetteURL,
-        method: "GET"
-      })
+            var carImage = $("<img>");
+            carImage.attr("src", still);
+            carImage.attr("data-still", still);
+            carImage.attr("data-animate", animated);
+            carImage.attr("data-state", "still");
+            carImage.addClass("car-image");
 
-      // After the data from the AJAX request comes back
-      .done(function(response) {
+            carDiv.append(p);
+            carDiv.append(carImage);
 
-        // Saving the image_original_url property
-        var imageUrl = response.data.image_original_url;
-
-        // Creating and storing an image tag
-        var carImage = $("<img>");
-
-        // Setting the catImage src attribute to imageUrl
-        carImage.attr("src", imageUrl);
-        carImage.attr("alt", "car image");
-
-        // Prepending the catImage to the images div
-        $("#images").prepend(carImage);
-      });
-    });*/
-
-//==================code to add button================
+            $("#cars").append(carDiv);
+}
+    });
+});
 
 var cars = ["Corvette", "Mustang", "Charger", "Chevelle"];
 
-      // Function for displaying movie data
-      function renderButtons() {
+function renderButtons() {
+    $("#car-view").empty();
 
-        // Deleting the movie buttons prior to adding new movie buttons
-        // (this is necessary otherwise we will have repeat buttons)
-        $("#car-view").empty();
+    for (var i = 0; i < cars.length; i++) {
+        var a = $("<button>");
+        a.addClass("car");
+        a.attr("data-name", cars[i]);
+        a.text(cars[i]);
 
-        // Looping through the array of movies
-        for (var i = 0; i < cars.length; i++) {
+        $("#car-view").append(a);
+    }
+}
 
-          // Then dynamicaly generating buttons for each movie in the array.
-          // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
-          var a = $("<button>");
-          // Adding a class
-          a.addClass("car");
-          // Adding a data-attribute with a value of the movie at index i
-          a.attr("data-name", cars[i]);
-          // Providing the button's text with a value of the movie at index i
-          a.text(cars[i]);
-          // Adding the button to the HTML
-          $("#car-view").append(a);
-        }
-      }
+$("#add-car").on("click", function (event) {
+    event.preventDefault();
 
-      // This function handles events where one button is clicked
-      $("#add-car").on("click", function(event) {
-        // event.preventDefault() prevents the form from trying to submit itself.
-        // We're using a form so that the user can hit enter instead of clicking the button if they want
-        event.preventDefault();
+    var car = $("#car-input").val().trim();
 
-        // This line will grab the text from the input box
-        var car = $("#car-input").val().trim();
-        // The movie from the textbox is then added to our array
-        cars.push(car);
+    if (car === '') return;
 
-        // calling renderButtons which handles the processing of our movie array
-        renderButtons();
-      });
+    cars.push(car);
 
-      // Calling the renderButtons function at least once to display the initial list of movies
-      renderButtons();
+    $("#car-input").val("");
+
+    renderButtons();
+});
+
+renderButtons();
+
+$("body").on("click", ".car-image", function(event) {
+    event.preventDefault();
+
+    var state = $(this).attr("data-state");
+
+    if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+    } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+    }
+});
