@@ -1,6 +1,6 @@
 
 
-$("#car-button").on("click", function() {
+/*$("#car-button").on("click", function() {
 
       // Storing our giphy API URL for a random cat image
       var corvetteURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=corvette";
@@ -31,11 +31,11 @@ $("#car-button").on("click", function() {
         // Prepending the catImage to the images div
         $("#images").prepend(carImage);
       });
-    });
+    });*/
 
 //==================code to add button================
 
-/*var cars = ["Corvette", "Mustang", "Charger", "Chevelle"];
+var cars = ["Corvette", "Mustang", "Charger", "Chevelle"];
 
       // Function for displaying movie data
       function renderButtons() {
@@ -77,4 +77,4 @@ $("#car-button").on("click", function() {
       });
 
       // Calling the renderButtons function at least once to display the initial list of movies
-      renderButtons();*/
+      renderButtons();
